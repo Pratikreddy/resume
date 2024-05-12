@@ -61,9 +61,10 @@ st.sidebar.write("""
 - Email: [Ps41066@gmail.com](mailto:Ps41066@gmail.com)
 - Location: Bengaluru, India
 #- LinkedIn: [Profile](https://www.linkedin.com/in/pratik-reddy-447b531b1/)
+
+""")
 #- X: [pratikredy](https://twitter.com/pratikredy)
 #- YT: [pratik_AI](https://www.youtube.com/@pratik_AI)
-""")
 st.sidebar.write("THIS IS A CHATBOT TO GET TO KNOW PRATIK")
 
 st.sidebar.subheader("Professional Summary")
