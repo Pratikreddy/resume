@@ -51,7 +51,7 @@ st.set_page_config(page_title="Pratik", layout="wide")
 
 st.title("PRATIK REDDY")
 st.write("An innovator with a passion for using tools and blending different technologies. I excel in optimizing processes and developing intelligent automation systems with cutting-edge AI. By combining creativity with technical expertise, I revolutionize business analytics to deliver high-impact solutions that drive organizational growth.")
-st.write("**Talk to Pratiks AI AGENT**")
+st.write("**Talk to Pratik's AI Agent**")
 
 st.sidebar.title("Resume Details")
 st.sidebar.write("""
@@ -69,7 +69,6 @@ Aiming to innovate and implement new ideas for growth.
 """)
 
 # Chat functionality
-#st.subheader("Chat with the Resume Chatbot")
 user_input = st.text_input("Type your message here:", key="user_input")
 
 if st.button("Send", key="send"):
@@ -94,11 +93,15 @@ if st.button("Send", key="send"):
     else:
         st.warning("Please enter some text to chat.")
 
-# Display chat history
+# Display chat history with custom borders
 for message in chat_history:
     if message.startswith("You:"):
-        st.text_area("", message, height=45, key=message[:10], help="Your message")
+        st.markdown(
+            f"<div style='border: 2px solid red; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message}</div>",
+            unsafe_allow_html=True
+        )
     else:
-        st.text_area("", message, height=100, key=message[:10], help="Chatbot's response")
-
-
+        st.markdown(
+            f"<div style='border: 2px solid green; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message}</div>",
+            unsafe_allow_html=True
+        )
