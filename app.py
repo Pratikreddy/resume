@@ -105,7 +105,7 @@ if st.button("Send"):
         # Append chatbot response to chat history
         st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
 
-        # Clear the input buffer
+        # Clear the input buffer manually
         st.session_state.user_input = ""
         st.experimental_rerun()
     else:
