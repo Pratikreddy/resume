@@ -86,7 +86,7 @@ for message in st.session_state.chat_history:
         )
 
 # Chat input and submit button below the conversation
-user_input = st.text_input("Type your message here:", key="user_input")
+user_input = st.text_input("Type your message here:", key="input_buffer")
 
 if st.button("Send"):
     if user_input:
@@ -108,6 +108,5 @@ if st.button("Send"):
         # Clear the input buffer
         st.session_state.input_buffer = ""
         st.experimental_rerun()
-
     else:
         st.warning("Please enter some text to chat.")
