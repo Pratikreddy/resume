@@ -86,12 +86,11 @@ for message in st.session_state.chat_history:
         )
 
 # Chat input and submit button below the conversation
-st.session_state.input_buffer = st.text_input("Type your message here:", value=st.session_state.input_buffer)
+user_input = st.text_input("Type your message here:", key="user_input")
 
-if st.button("Send", key="send"):
-    user_input = st.session_state.input_buffer.strip()
+if st.button("Send"):
     if user_input:
-        # Update chat history with user message
+        # Append user input to chat history
         st.session_state.chat_history.append({"role": "user", "content": user_input})
 
         # Call Groq API with the entire chat history
@@ -103,11 +102,12 @@ if st.button("Send", key="send"):
         )
         chatbot_response = response.choices[0].message.content.strip()
 
-        # Update chat history with chatbot response
+        # Append chatbot response to chat history
         st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
 
         # Clear the input buffer
         st.session_state.input_buffer = ""
+        st.experimental_rerun()
 
     else:
         st.warning("Please enter some text to chat.")
