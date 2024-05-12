@@ -53,7 +53,7 @@ st.title("PRATIK REDDY")
 st.write("An innovator with a passion for using tools and blending different technologies. I excel in optimizing processes and developing intelligent automation systems with cutting-edge AI. By combining creativity with technical expertise, I revolutionize business analytics to deliver high-impact solutions that drive organizational growth.")
 st.write("**Talk to Isabella, Pratik's AI Agent**")
 
-st.sidebar.title("Resume Details")
+#st.sidebar.title("Resume Details")
 st.sidebar.write("""
 **Pratik Reddy**
 - Email: [Ps41066@gmail.com](mailto:Ps41066@gmail.com)
@@ -62,6 +62,7 @@ st.sidebar.write("""
 - X: [pratikredy](https://twitter.com/pratikredy)
 - YT: [pratik_AI](https://www.youtube.com/@pratik_AI)
 """)
+st.sidebar.write("THIS IS A CHATBOT TO GET TO KNOW PRATIK")
 
 st.sidebar.subheader("Professional Summary")
 st.sidebar.write("""
