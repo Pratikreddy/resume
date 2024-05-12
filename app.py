@@ -47,10 +47,10 @@ Personal Projects:
 chat_history = []
 
 # Streamlit app UI
-st.set_page_config(page_title="Pratik S Reddy's Resume Chatbot", layout="wide")
+st.set_page_config(page_title="Pratik", layout="wide")
 
 st.title("PRATIK REDDY")
-st.write("**Interact with a chatbot based on Pratik's resume details**")
+st.write("**Talk to Pratiks AI AGENT**")
 
 st.sidebar.title("Resume Details")
 st.sidebar.write("""
@@ -68,7 +68,7 @@ Aiming to innovate and implement new ideas for growth.
 """)
 
 # Chat functionality
-st.subheader("Chat with the Resume Chatbot")
+#st.subheader("Chat with the Resume Chatbot")
 user_input = st.text_input("Type your message here:", key="user_input")
 
 if st.button("Send", key="send"):
@@ -96,8 +96,8 @@ if st.button("Send", key="send"):
 # Display chat history
 for message in chat_history:
     if message.startswith("You:"):
-        st.text_area("", message, height=75, key=message[:10], help="Your message")
+        st.text_area("", message, height=45, key=message[:10], help="Your message")
     else:
-        st.text_area("", message, height=75, key=message[:10], help="Chatbot's response")
+        st.text_area("", message, height=95, key=message[:10], help="Chatbot's response")
 
 
