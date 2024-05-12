@@ -61,6 +61,8 @@ st.sidebar.write("""
 - Phone: +91-7406056171
 - Location: Bengaluru, India
 - LinkedIn: [Profile](https://www.linkedin.com/in/pratik-reddy-447b531b1/)
+- X: [X](https://twitter.com/pratikredy)
+- YT: [YouTube](https://twitter.com/pratikredy)
 """)
 
 st.sidebar.subheader("Professional Summary")
