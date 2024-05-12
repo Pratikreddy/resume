@@ -52,7 +52,7 @@ if "input_buffer" not in st.session_state:
 st.set_page_config(page_title="Pratik", layout="wide")
 
 st.title("PRATIK REDDY")
-st.write("An innovator with a passion for using tools and blending different technologies. I excel in optimizing processes and developing intelligent automation systems with cutting-edge AI. By combining creativity with technical expertise, I revolutionize business analytics to deliver high-impact solutions that drive organizational growth.")
+st.write("An innovator with a passion for using tools and blending different technologies. I excel in optimizing processes and developing intelligent automation systems with cutting-edge AI. By combining creativity with technical expertise, I revolutionize business and data analytics to deliver high-impact solutions that drive organizational growth.")
 st.write("**Talk to Isabella, Pratik's AI Agent**")
 
 # Sidebar details
