@@ -99,6 +99,6 @@ for message in chat_history:
     if message.startswith("You:"):
         st.text_area("", message, height=45, key=message[:10], help="Your message")
     else:
-        st.text_area("", message, height=95, key=message[:10], help="Chatbot's response")
+        st.text_area("", message, height=100, key=message[:10], help="Chatbot's response")
 
 
