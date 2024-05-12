@@ -5,9 +5,9 @@ from groq import Groq
 groq_api_key = "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"
 groq_client = Groq(api_key=groq_api_key)
 
-# Initial system message
+# Initial system message explaining the agent's role
 system_message = """
-You are a helpful assistant providing answers based on the resume of PRATIK S REDDY.
+You are Isabella, a helpful assistant providing answers on behalf of Pratik S Reddy based on his resume.
 Name: Pratik S Reddy
 Email: Ps41066@gmail.com
 Phone: +91-7406056171
@@ -52,7 +52,7 @@ st.set_page_config(page_title="Pratik", layout="wide")
 
 st.title("PRATIK REDDY")
 st.write("An innovator with a passion for using tools and blending different technologies. I excel in optimizing processes and developing intelligent automation systems with cutting-edge AI. By combining creativity with technical expertise, I revolutionize business analytics to deliver high-impact solutions that drive organizational growth.")
-st.write("**Talk to Pratik's AI Agent**")
+st.write("**Talk to Isabella, Pratik's AI Agent**")
 
 st.sidebar.title("Resume Details")
 st.sidebar.write("""
@@ -69,57 +69,20 @@ Passionate learner skilled in process optimization, automation, and analytics.
 Aiming to innovate and implement new ideas for growth.
 """)
 
-# Scrollable chat container with scroll bar
-st.markdown(
-    """
-    <style>
-    .chat-container {
-        height: 400px;
-        overflow-y: scroll;
-        padding: 10px;
-        border: 2px solid gray;
-        border-radius: 8px;
-    }
-    .message-box {
-        border: 2px solid;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 8px;
-        width: 80%;
-    }
-    .user-message {
-        border-color: red;
-        float: right;
-        clear: both;
-    }
-    .assistant-message {
-        border-color: green;
-        float: left;
-        clear: both;
-    }
-    </style>
-    <div class="chat-container" id="chat-box">
-    """,
-    unsafe_allow_html=True
-)
-
-# Display chat history within the chat container
+# Chat history with custom borders but without the larger box
 for message in st.session_state.chat_history:
     if message["role"] == "user":
         st.markdown(
-            f"<div class='message-box user-message'>{message['content']}</div>",
+            f"<div style='border: 2px solid red; padding: 10px; margin: 10px 0; border-radius: 8px; width: 80%; float: right; clear: both;'>{message['content']}</div>",
             unsafe_allow_html=True
         )
     elif message["role"] == "assistant":
         st.markdown(
-            f"<div class='message-box assistant-message'>{message['content']}</div>",
+            f"<div style='border: 2px solid green; padding: 10px; margin: 10px 0; border-radius: 8px; width: 80%; float: left; clear: both;'>{message['content']}</div>",
             unsafe_allow_html=True
         )
 
-# Close the chat container div
-st.markdown("</div>", unsafe_allow_html=True)
-
-# Chat functionality - input and submit button below the conversation
+# Chat input and submit button below the conversation
 user_input = st.text_input("Type your message here:", key="user_input")
 
 if st.button("Send", key="send"):
