@@ -45,8 +45,8 @@ Personal Projects:
 # Initialize chat history as a session state
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = [{"role": "system", "content": system_message}]
-if "user_input" not in st.session_state:
-    st.session_state.user_input = ""
+if "input_buffer" not in st.session_state:
+    st.session_state.input_buffer = ""
 
 # Streamlit app UI
 st.set_page_config(page_title="Pratik", layout="wide")
@@ -86,7 +86,7 @@ for message in st.session_state.chat_history:
         )
 
 # Chat input and submit button below the conversation
-user_input = st.text_input("Type your message here:", value=st.session_state.user_input, key="input_widget")
+user_input = st.text_input("Type your message here:", key="user_input")
 
 if st.button("Send"):
     if user_input:
@@ -98,15 +98,16 @@ if st.button("Send"):
             model="llama3-70b-8192",
             messages=st.session_state.chat_history,
             temperature=0.3,
-            max_tokens=1024
+            max_tokens=2000
         )
         chatbot_response = response.choices[0].message.content.strip()
 
         # Append chatbot response to chat history
         st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
 
-        # Clear the input buffer manually
-        st.session_state.user_input = ""
+        # Clear the input buffer
+        st.session_state.input_buffer = ""
         st.experimental_rerun()
+
     else:
         st.warning("Please enter some text to chat.")
