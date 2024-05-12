@@ -77,7 +77,7 @@ if st.button("Send", key="send"):
         # Update chat history with user message
         st.session_state.chat_history.append({"role": "user", "content": user_input})
 
-        # Call Groq API with entire chat history
+        # Call Groq API with the entire chat history
         response = groq_client.chat.completions.create(
             model="llama3-70b-8192",
             messages=st.session_state.chat_history,
