@@ -45,7 +45,7 @@ Personal Projects:
 
 # Initialize chat history as a session state
 if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
+    st.session_state.chat_history = [{"role": "system", "content": system_message}]
 
 # Streamlit app UI
 st.set_page_config(page_title="Pratik", layout="wide")
@@ -75,39 +75,35 @@ user_input = st.text_input("Type your message here:", key="user_input")
 if st.button("Send", key="send"):
     if user_input:
         # Update chat history with user message
-        st.session_state.chat_history.append(f"You: {user_input}")
+        st.session_state.chat_history.append({"role": "user", "content": user_input})
 
-        # Prepare messages for Groq API
-        messages = [{"role": "system", "content": system_message}]
-        messages.extend({"role": "user", "content": msg.split(': ', 1)[1]} for msg in st.session_state.chat_history if msg.startswith("You:"))
-        
-        # Call Groq API
+        # Call Groq API with entire chat history
         response = groq_client.chat.completions.create(
             model="llama3-70b-8192",
-            messages=messages,
+            messages=st.session_state.chat_history,
             temperature=0.3,
             max_tokens=1024
         )
         chatbot_response = response.choices[0].message.content.strip()
 
         # Update chat history with chatbot response
-        st.session_state.chat_history.append(f"Chatbot: {chatbot_response}")
+        st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
 
     else:
         st.warning("Please enter some text to chat.")
 
 # Display chat history with custom borders
 for message in st.session_state.chat_history:
-    if message.startswith("You:"):
+    if message["role"] == "user":
         st.markdown(
-            f"<div style='border: 2px solid red; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message}</div>",
+            f"<div style='border: 2px solid red; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message['content']}</div>",
             unsafe_allow_html=True
         )
-    else:
+    elif message["role"] == "assistant":
         st.markdown(
-            f"<div style='border: 2px solid green; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message}</div>",
+            f"<div style='border: 2px solid green; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message['content']}</div>",
             unsafe_allow_html=True
         )
 
 # Ensure the "Send" button remains at the bottom
-st.write("")  
+st.write("")
