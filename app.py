@@ -45,6 +45,8 @@ Personal Projects:
 # Initialize chat history as a session state
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = [{"role": "system", "content": system_message}]
+if "input_buffer" not in st.session_state:
+    st.session_state.input_buffer = ""
 
 # Streamlit app UI
 st.set_page_config(page_title="Pratik", layout="wide")
@@ -53,7 +55,7 @@ st.title("PRATIK REDDY")
 st.write("An innovator with a passion for using tools and blending different technologies. I excel in optimizing processes and developing intelligent automation systems with cutting-edge AI. By combining creativity with technical expertise, I revolutionize business analytics to deliver high-impact solutions that drive organizational growth.")
 st.write("**Talk to Isabella, Pratik's AI Agent**")
 
-#st.sidebar.title("Resume Details")
+# Sidebar details
 st.sidebar.write("""
 **Pratik Reddy**
 - Email: [Ps41066@gmail.com](mailto:Ps41066@gmail.com)
@@ -84,9 +86,10 @@ for message in st.session_state.chat_history:
         )
 
 # Chat input and submit button below the conversation
-user_input = st.text_input("Type your message here:", key="user_input")
+st.session_state.input_buffer = st.text_input("Type your message here:", value=st.session_state.input_buffer)
 
 if st.button("Send", key="send"):
+    user_input = st.session_state.input_buffer.strip()
     if user_input:
         # Update chat history with user message
         st.session_state.chat_history.append({"role": "user", "content": user_input})
@@ -102,6 +105,9 @@ if st.button("Send", key="send"):
 
         # Update chat history with chatbot response
         st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
+
+        # Clear the input buffer
+        st.session_state.input_buffer = ""
 
     else:
         st.warning("Please enter some text to chat.")
