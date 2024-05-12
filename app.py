@@ -10,7 +10,6 @@ system_message = """
 You are Isabella, a helpful assistant providing answers on behalf of Pratik S Reddy based on his resume.
 Name: Pratik S Reddy
 Email: Ps41066@gmail.com
-Phone: +91-7406056171
 Location: Bengaluru, India
 LinkedIn: https://www.linkedin.com/in/pratik-reddy-447b531b1/
 
@@ -56,9 +55,8 @@ st.write("**Talk to Isabella, Pratik's AI Agent**")
 
 st.sidebar.title("Resume Details")
 st.sidebar.write("""
-**Pratik S Reddy**
+**Pratik Reddy**
 - Email: [Ps41066@gmail.com](mailto:Ps41066@gmail.com)
-- Phone: +91-7406056171
 - Location: Bengaluru, India
 - LinkedIn: [Profile](https://www.linkedin.com/in/pratik-reddy-447b531b1/)
 - X: [pratikredy](https://twitter.com/pratikredy)
