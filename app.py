@@ -43,8 +43,9 @@ Personal Projects:
 - Building Web3 dashboards, MP4 subtitling with GPT Whisper, and RPA Finance Tracker.
 """
 
-# List to hold chat history
-chat_history = []
+# Initialize chat history as a session state
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
 # Streamlit app UI
 st.set_page_config(page_title="Pratik", layout="wide")
@@ -74,11 +75,13 @@ user_input = st.text_input("Type your message here:", key="user_input")
 if st.button("Send", key="send"):
     if user_input:
         # Update chat history with user message
-        chat_history.append(f"You: {user_input}")
+        st.session_state.chat_history.append(f"You: {user_input}")
 
-        # Call Groq API
+        # Prepare messages for Groq API
         messages = [{"role": "system", "content": system_message}]
-        messages.extend({"role": "user", "content": msg.split(': ', 1)[1]} for msg in chat_history if msg.startswith("You:"))
+        messages.extend({"role": "user", "content": msg.split(': ', 1)[1]} for msg in st.session_state.chat_history if msg.startswith("You:"))
+        
+        # Call Groq API
         response = groq_client.chat.completions.create(
             model="llama3-70b-8192",
             messages=messages,
@@ -88,13 +91,13 @@ if st.button("Send", key="send"):
         chatbot_response = response.choices[0].message.content.strip()
 
         # Update chat history with chatbot response
-        chat_history.append(f"Chatbot: {chatbot_response}")
+        st.session_state.chat_history.append(f"Chatbot: {chatbot_response}")
 
     else:
         st.warning("Please enter some text to chat.")
 
 # Display chat history with custom borders
-for message in chat_history:
+for message in st.session_state.chat_history:
     if message.startswith("You:"):
         st.markdown(
             f"<div style='border: 2px solid red; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message}</div>",
@@ -105,3 +108,6 @@ for message in chat_history:
             f"<div style='border: 2px solid green; padding: 10px; margin: 10px 0; border-radius: 8px;'>{message}</div>",
             unsafe_allow_html=True
         )
+
+# Ensure the "Send" button remains at the bottom
+st.write("")  
