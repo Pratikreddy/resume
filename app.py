@@ -12,7 +12,7 @@ Name: Pratik S Reddy
 Email: Ps41066@gmail.com
 Phone: +91-7406056171
 Location: Bengaluru, India
-LinkedIn: https://www.linkedin.com/in/pratik-reddy
+LinkedIn: https://www.linkedin.com/in/pratik-reddy-447b531b1/
 
 Professional Summary:
 Passionate learner skilled in process optimization, automation, and analytics.
@@ -60,7 +60,7 @@ st.sidebar.write("""
 - Email: [Ps41066@gmail.com](mailto:Ps41066@gmail.com)
 - Phone: +91-7406056171
 - Location: Bengaluru, India
-- LinkedIn: [Profile](https://www.linkedin.com/in/pratik-reddy)
+- LinkedIn: [Profile](https://www.linkedin.com/in/pratik-reddy-447b531b1/)
 """)
 
 st.sidebar.subheader("Professional Summary")
