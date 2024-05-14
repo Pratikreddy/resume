@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 
 # Set up API key and initialize Groq client
-groq_api_key = "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"
+groq_api_key = 
 groq_client = Groq(api_key=groq_api_key)
 
 # Initial system message explaining the agent's role
