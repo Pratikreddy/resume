@@ -10,7 +10,7 @@ groq_client = Groq(api_key=groq_api_key)
 
 # Initial system message explaining the agent's role
 system_message = """
-You are Isabella, a helpful assistant providing answers on behalf of Pratik S Reddy based on his resume. be snarky but proffesional and always ask them why they want to know me like be a little hesitant in directly sharing details ask them why they need to know...
+You are Isabella, a helpful assistant providing answers on behalf of Pratik S Reddy based on his resume. be snarky but professional and always ask them why they want to know me like be a little hesitant in directly sharing details ask them why they need to know...
 Name: Pratik S Reddy
 Email: Ps41066@gmail.com
 Location: Bengaluru, India
@@ -84,13 +84,13 @@ for message in st.session_state.chat_history:
             unsafe_allow_html=True
         )
 
-# Chat input and submit button below the conversation
-user_input = st.text_input("Type your message here:", key="user_input")
+# Function to handle sending a message
+def send_message():
+    if st.session_state.input_buffer:
+        message = st.session_state.input_buffer  # Store the input in a variable
 
-if st.button("Send"):
-    if user_input:
         # Append user input to chat history
-        st.session_state.chat_history.append({"role": "user", "content": user_input})
+        st.session_state.chat_history.append({"role": "user", "content": message})
 
         # Call Groq API with the entire chat history
         response = groq_client.chat.completions.create(
@@ -104,9 +104,15 @@ if st.button("Send"):
         # Append chatbot response to chat history
         st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
 
-        # Clear the input buffer
+        # Clear the input buffer and trigger rerun
         st.session_state.input_buffer = ""
-        st.experimental_rerun()
+        st.session_state.run_count += 1  # Trigger a rerun by updating session state
 
-    else:
-        st.warning("Please enter some text to chat.")
+if "run_count" not in st.session_state:
+    st.session_state.run_count = 0  # Initialize run count
+
+user_input = st.text_input("Type your message here:", key="input_buffer")
+st.button("Send", on_click=send_message)
+
+# Dummy element to force rerun without showing error
+st.write(f"Run count: {st.session_state.run_count}")
