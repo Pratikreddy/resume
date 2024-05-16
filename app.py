@@ -129,25 +129,3 @@ st.button("Send", on_click=send_message)
 
 # Dummy element to force rerun without showing error
 st.write(f"Run count: {st.session_state.run_count}")
-
-# CRUD Operations
-st.divider()
-st.write("CRUD Operations:")
-
-# Taking actions based on user input
-if st.button("New Worksheet"):
-    conn.create(worksheet=worksheet_id, data=pd.DataFrame(st.session_state.chat_history))
-    st.success("Worksheet Created 📝")
-
-if st.button("Calculate Total Orders Sum"):
-    sql = 'SELECT SUM("TotalPrice") as "TotalOrdersPrice" FROM Orders;'
-    total_orders = conn.query(sql=sql)  # default ttl=3600 seconds / 60 min
-    st.dataframe(total_orders)
-
-if st.button("Update Worksheet"):
-    conn.update(worksheet=worksheet_id, data=pd.DataFrame(st.session_state.chat_history))
-    st.success("Worksheet Updated 🤓")
-
-if st.button("Clear Worksheet"):
-    conn.clear(worksheet=worksheet_id)
-    st.success("Worksheet Cleared 🧹")
