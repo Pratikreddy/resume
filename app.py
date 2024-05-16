@@ -1,173 +1,118 @@
 import streamlit as st
-import json
-import requests
-from openai import OpenAI
 from groq import Groq
+import json
 
-# Set up the page layout
-st.set_page_config(page_title="Model Match", layout="wide")
+# Get the API key from Streamlit secrets
+groq_api_key = st.secrets["GROQ_API_KEY"]
 
-# Sidebar for navigation
-with st.sidebar:
-    st.title("Model Match")
-    page = st.selectbox("Select Mode", ["Text Comparison", "Image Comparison (Coming Soon)", "Audio Comparison (Coming Soon)"])
+# Set up API key and initialize Groq client
+groq_client = Groq(api_key=groq_api_key)
 
-# Define model options organized by group
-model_options = {
-    "OpenAI": [
-        "gpt-4o-2024-05-13",
-        "gpt-4-turbo-2024-04-09",
-        "gpt-4-turbo-preview",
-        "gpt-4-0125-preview",
-        "gpt-4-1106-preview",
-        "gpt-4-vision-preview",
-        "gpt-4-1106-vision-preview",
-        "gpt-3.5-turbo-0125",
-        "gpt-3.5-turbo",
-        "gpt-3.5-turbo-1106",
-        "gpt-3.5-turbo-instruct",
-        "gpt-3.5-turbo-16k",
-        "gpt-3.5-turbo-0613",
-        "gpt-3.5-turbo-16k-0613"
-    ],
-    "Gemini": [
-        "gemini-1.5-pro-latest",
-        "gemini-1.5-flash-latest",
-        "gemini-1.0-pro-latest"
-    ],
-    "Groq": [
-        "gemma-7b-it",
-        "llama3-70b-8192",
-        "llama3-8b-8192",
-        "mixtral-8x7b-32768"
-    ]
-}
+# Initial system message explaining the agent's role
+system_message = """
+You are Isabella, a helpful assistant providing answers on behalf of Pratik S Reddy based on his resume. be snarky but professional and always ask them why they want to know me like be a little hesitant in directly sharing details ask them why they need to know...
+Name: Pratik S Reddy
+Email: Ps41066@gmail.com
+Location: Bengaluru, India
+LinkedIn: https://www.linkedin.com/in/pratik-reddy-447b531b1/
 
-# Functions for making API calls to different models
-def gemini(system_prompt, user_prompt, expected_format, url):
-    payload = json.dumps({
-        "contents": [
-            {
-                "parts": [
-                    {"text": f"system_prompt : {system_prompt}"},
-                    {"text": f"user_prompt : {user_prompt}"},
-                    {"text": f"expected_format : {expected_format}"}
-                ]
-            }
-        ],
-        "generationConfig": {
-            "response_mime_type": "application/json"
-        }
-    })
+Professional Summary:
+Passionate learner skilled in process optimization, automation, and analytics.
+Aiming to innovate and implement new ideas for growth.
 
-    headers = {'Content-Type': 'application/json'}
+Work History:
+1. Solutions dev at Ayotta.
+    - data analytics and ETL
+    - Ai solutions in automated pipelines
+    - KnowledgeProcess bots
+2. EOX VANTAGE - Associate Analyst, Data Science Team:
+    - RPA development, VBA scripting, and AI-powered automation.
+    - Web scraping, data extraction, sentiment analysis, and premium rating model development.
+    - Leveraged GPT-4 and Azure AI for automation.
 
-    response = requests.post(url, headers=headers, data=payload)
-    response_data = response.json()
-    text_value = response_data["candidates"][0]["content"]["parts"][0]["text"]
-    return text_value
+3. ORCAD - Intern:
+    - Managed multiple stakeholders in marketing projects in education industry
 
-def gpt(system_prompt, user_prompt, expected_format, gptkey, model):
-    client = OpenAI(api_key=gptkey)
-    chat_completion, *_ = client.chat.completions.create(
-        messages=[
-            {"role": "system", "content": f"system_prompt : {system_prompt}"},
-            {"role": "user", "content": f"user_prompt : {user_prompt}"},
-            {"role": "user", "content": f"expected_JSON_format : {expected_format}"}
-        ],
-        model=f"{model}",
-        response_format={"type": "json_object"},
-    ).choices
+Education:
+1. Indiana University of Pennsylvania: MBA
+2. PES University: BBA
+3. Udemy, Google Skillshop: Courses in Python, SQL, GPT API, and Google Ads.
 
-    content = chat_completion.message.content
-    return content
+Accomplishments:
+- All India Football Federation licensed coach.
+- 360 and immersive VR video.
+"""
 
-def groq(system_prompt, user_prompt, expected_format, groqkey, model):
-    client = Groq(api_key=groqkey)
-    completion = client.chat.completions.create(
-        model=f"{model}",
-        messages=[
-            {"role": "system", "content": f"output only JSON object. {system_prompt}"},
-            {"role": "user", "content": f"{expected_format}"},
-            {"role": "user", "content": f"{user_prompt}"}
-        ],
-        response_format={"type": "json_object"},
-    )
-    content = completion.choices[0].message.content
-    reply = json.loads(content)
-    return reply
-
-# Initialize chat history in session state
+# Initialize chat history as a session state
 if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-# Helper function to map model names to appropriate API calls
-def call_model_api(model, system_prompt, user_prompt, expected_format, keys):
-    if "gemini" in model:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={keys['gemini']}"
-        return gemini(system_prompt, user_prompt, expected_format, url)
-    elif "gpt" in model:
-        return gpt(system_prompt, user_prompt, expected_format, keys['openai'], model)
-    elif "llama" in model or "gemma" in model or "mixtral" in model:
-        return groq(system_prompt, user_prompt, expected_format, keys['groq'], model)
-    else:
-        return "Model not supported"
+    st.session_state.chat_history = [{"role": "system", "content": system_message}]
+if "input_buffer" not in st.session_state:
+    st.session_state.input_buffer = ""
 
 # Streamlit app UI
-st.title("Model Match")
-st.write("Compare outputs from different AI models.")
+st.set_page_config(page_title="Pratik", layout="wide")
 
-# Text Comparison Page
-if page == "Text Comparison":
-    st.header("Text Comparison")
+st.title("PRATIK REDDY")
+st.write("I love playing around with different tools and mixing up tech to make things better. I enjoy streamlining processes and creating smart automation systems using a combination of the latest with the most reliable. With creativity and tech skills, I transform business and data analytics to come up with impactful solutions that help organizations grow")
+st.write("**Talk to Isabella, Pratik's AI Agent**")
 
-    # API keys input
-    st.subheader("Enter API Keys")
-    gemini_api_key_text = st.text_input("Gemini API Key (Text)", type="password")
-    openai_api_key_text = st.text_input("OpenAI API Key (Text)", type="password")
-    groq_api_key_text = st.text_input("Groq API Key (Text)", type="password")
+# Sidebar details
+st.sidebar.write("""
+**Pratik Reddy**
+- Email: [Ps41066@gmail.com](mailto:Ps41066@gmail.com)
+- Location: Bengaluru, India
+""")
 
-    # Store keys in a dictionary
-    api_keys = {
-        "gemini": gemini_api_key_text,
-        "openai": openai_api_key_text,
-        "groq": groq_api_key_text
-    }
+st.sidebar.write("THIS IS A CHATBOT TO GET TO KNOW PRATIK")
 
-    # Dropdown to select models for comparison
-    selected_models = []
-    for group, models in model_options.items():
-        st.subheader(group)
-        selected_models += st.multiselect(f"Select {group} models", models, key=f"{group}_models")
+st.sidebar.subheader("Professional Summary")
+st.sidebar.write("""
+Passionate learner skilled in process optimization, automation, and analytics.
+Aiming to innovate and implement new ideas for growth.
+""")
 
-    selected_models = selected_models[:5]  # Limit to 5 models
+# Chat history with custom borders but without the larger box
+for message in st.session_state.chat_history:
+    if message["role"] == "user":
+        st.markdown(
+            f"<div style='border: 2px solid red; padding: 10px; margin: 10px 0; border-radius: 8px; width: 80%; float: right; clear: both;'>{message['content']}</div>",
+            unsafe_allow_html=True
+        )
+    elif message["role"] == "assistant":
+        st.markdown(
+            f"<div style='border: 2px solid green; padding: 10px; margin: 10px 0; border-radius: 8px; width: 80%; float: left; clear: both;'>{message['content']}</div>",
+            unsafe_allow_html=True
+        )
 
-    # Text input for user prompt
-    user_prompt = st.text_area("Enter your prompt here")
+# Function to handle sending a message
+def send_message():
+    if st.session_state.input_buffer:
+        message = st.session_state.input_buffer  # Store the input in a variable
 
-    # Button to compare outputs
-    if st.button("Compare"):
-        if len(selected_models) == 0:
-            st.warning("Please select at least one model for comparison.")
-        elif not user_prompt:
-            st.warning("Please enter a prompt.")
-        else:
-            st.write("Comparing outputs for the selected models...")
+        # Append user input to chat history
+        st.session_state.chat_history.append({"role": "user", "content": message})
 
-            # Placeholder for the honeycomb structure of model outputs
-            cols = st.columns(5)
-            for i, model in enumerate(selected_models):
-                with cols[i % 5]:
-                    output = call_model_api(model, system_prompt, user_prompt, expected_format, api_keys)
-                    st.write(f"Output from {model}:")
-                    st.write(output)
+        # Call Groq API with the entire chat history
+        response = groq_client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=st.session_state.chat_history,
+            temperature=0.3,
+            max_tokens=2000
+        )
+        chatbot_response = response.choices[0].message.content.strip()
 
-# Image Comparison Page
-elif page == "Image Comparison (Coming Soon)":
-    st.header("Image Comparison")
-    st.write("Coming Soon...")
+        # Append chatbot response to chat history
+        st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response})
 
-# Audio Comparison Page
-elif page == "Audio Comparison (Coming Soon)":
-    st.header("Audio Comparison")
-    st.write("Coming Soon...")
+        # Clear the input buffer and trigger rerun
+        st.session_state.input_buffer = ""
+        st.session_state.run_count += 1  # Trigger a rerun by updating session state
+
+if "run_count" not in st.session_state:
+    st.session_state.run_count = 0  # Initialize run count
+
+user_input = st.text_input("Type your message here:", key="input_buffer")
+st.button("Send", on_click=send_message)
+
+# Dummy element to force rerun without showing error
+st.write(f"Run count: {st.session_state.run_count}")
