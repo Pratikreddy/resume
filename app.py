@@ -3,7 +3,10 @@ from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
 from groq import Groq
+
+# Set page configuration
 st.set_page_config(page_title="Pratik", layout="wide")
+
 # Get the API key from Streamlit secrets
 groq_api_key = st.secrets["GROQ_API_KEY"]
 
@@ -88,8 +91,6 @@ if "run_count" not in st.session_state:
     st.session_state.run_count = 0  # Initialize run count
 
 # Streamlit app UI
-
-
 st.title("PRATIK REDDY")
 st.write("I love playing around with different tools and mixing up tech to make things better. I enjoy streamlining processes and creating smart automation systems using a combination of the latest with the most reliable. With creativity and tech skills, I transform business and data analytics to come up with impactful solutions that help organizations grow")
 st.write("**Talk to Isabella, Pratik's AI Agent**")
