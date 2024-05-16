@@ -64,26 +64,28 @@ def gemini(system_prompt, user_prompt, expected_format, url):
 
     response = requests.post(url, headers=headers, data=payload)
     response_data = response.json()
-    return response_data["candidates"][0]["content"]["parts"][0]["text"]
+    text_value = response_data["candidates"][0]["content"]["parts"][0]["text"]
+    return text_value
 
 def gpt(system_prompt, user_prompt, expected_format, gptkey, model):
     client = OpenAI(api_key=gptkey)
-    chat_completion = client.chat.completions.create(
+    chat_completion, *_ = client.chat.completions.create(
         messages=[
             {"role": "system", "content": f"system_prompt : {system_prompt}"},
             {"role": "user", "content": f"user_prompt : {user_prompt}"},
             {"role": "user", "content": f"expected_JSON_format : {expected_format}"}
         ],
-        model=model,
+        model=f"{model}",
         response_format={"type": "json_object"},
     ).choices
-    content = chat_completion[0].message.content
+
+    content = chat_completion.message.content
     return content
 
 def groq(system_prompt, user_prompt, expected_format, groqkey, model):
     client = Groq(api_key=groqkey)
     completion = client.chat.completions.create(
-        model=model,
+        model=f"{model}",
         messages=[
             {"role": "system", "content": f"output only JSON object. {system_prompt}"},
             {"role": "user", "content": f"{expected_format}"},
@@ -92,7 +94,8 @@ def groq(system_prompt, user_prompt, expected_format, groqkey, model):
         response_format={"type": "json_object"},
     )
     content = completion.choices[0].message.content
-    return json.loads(content)
+    reply = json.loads(content)
+    return reply
 
 # Initialize chat history in session state
 if "chat_history" not in st.session_state:
@@ -155,7 +158,7 @@ if page == "Text Comparison":
             cols = st.columns(5)
             for i, model in enumerate(selected_models):
                 with cols[i % 5]:
-                    output = call_model_api(model, "system_prompt", user_prompt, "expected_format", api_keys)
+                    output = call_model_api(model, system_prompt, user_prompt, expected_format, api_keys)
                     st.write(f"Output from {model}:")
                     st.write(output)
 
