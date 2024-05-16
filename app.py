@@ -3,7 +3,6 @@ from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import datetime
 from groq import Groq
-import uuid
 
 # Set page configuration
 st.set_page_config(page_title="Pratik", layout="wide")
@@ -55,20 +54,25 @@ spreadsheet_url = st.secrets["connections"]["gsheets"]["spreadsheet"]
 # Set up connection to Google Sheets
 conn = st.experimental_connection("gsheets", type=GSheetsConnection)
 
-# Initialize chat history and session ID as a session state
+# Initialize chat history and worksheet name as a session state
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-if "session_id" not in st.session_state:
-    st.session_state.session_id = str(uuid.uuid4())
+if "worksheet_name" not in st.session_state:
+    st.session_state.worksheet_name = None
 
 # Function to handle sending a message
 def send_message():
     if st.session_state.input_buffer:
         message = st.session_state.input_buffer  # Store the input in a variable
-
+        
         # Append user input to chat history
         st.session_state.chat_history.append({"role": "user", "content": message, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+
+        # Create a new worksheet if it's the first message
+        if st.session_state.worksheet_name is None:
+            st.session_state.worksheet_name = f"Chat_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            conn.create(worksheet=st.session_state.worksheet_name, data=pd.DataFrame(st.session_state.chat_history))
 
         # Call Groq API with the entire chat history
         response = groq_client.chat.completions.create(
@@ -82,11 +86,10 @@ def send_message():
         # Append chatbot response to chat history
         st.session_state.chat_history.append({"role": "assistant", "content": chatbot_response, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
 
-        # Save chat history to a new Google Sheets worksheet
+        # Save chat history to the created worksheet
         data = pd.DataFrame(st.session_state.chat_history)
-        worksheet_title = f"Chat_{st.session_state.session_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
-        conn.create(worksheet=worksheet_title, data=data)  # Create a new worksheet for each chat session
-        st.success("Chat history saved to a new Google Sheets worksheet")
+        conn.update(worksheet=st.session_state.worksheet_name, data=data)  # Update the created worksheet
+        st.success("Chat history saved to Google Sheets")
 
         # Clear the input buffer and trigger rerun
         st.session_state.input_buffer = ""
