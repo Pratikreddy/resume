@@ -48,9 +48,9 @@ Accomplishments:
 - 360 and immersive VR video.
 """
 
-# Google Sheets URL and worksheet ID
-url = "https://docs.google.com/spreadsheets/d/100IpDakpyns1M3QKBqA3kXa4aAN6cb6pBfT4Kwu1358/edit?usp=sharing"
-worksheet_id = "149310239"
+# Get Google Sheets credentials from Streamlit secrets
+spreadsheet_url = st.secrets["connections"]["gsheets"]["spreadsheet"]
+worksheet_id = st.secrets["connections"]["gsheets"]["worksheet"]
 
 # Set up connection to Google Sheets
 conn = st.experimental_connection("gsheets", type=GSheetsConnection)
@@ -81,7 +81,8 @@ def send_message():
 
         # Save chat history to Google Sheets
         data = pd.DataFrame(st.session_state.chat_history)
-        conn.write(data, spreadsheet=url, worksheet=worksheet_id)
+        conn.create(worksheet="ChatHistory", data=data)  # Create new worksheet
+        st.success("Chat history saved to Google Sheets")
 
         # Clear the input buffer and trigger rerun
         st.session_state.input_buffer = ""
@@ -128,3 +129,25 @@ st.button("Send", on_click=send_message)
 
 # Dummy element to force rerun without showing error
 st.write(f"Run count: {st.session_state.run_count}")
+
+# CRUD Operations
+st.divider()
+st.write("CRUD Operations:")
+
+# Taking actions based on user input
+if st.button("New Worksheet"):
+    conn.create(worksheet="ChatHistory", data=pd.DataFrame(st.session_state.chat_history))
+    st.success("Worksheet Created 📝")
+
+if st.button("Calculate Total Orders Sum"):
+    sql = 'SELECT SUM("TotalPrice") as "TotalOrdersPrice" FROM Orders;'
+    total_orders = conn.query(sql=sql)  # default ttl=3600 seconds / 60 min
+    st.dataframe(total_orders)
+
+if st.button("Update Worksheet"):
+    conn.update(worksheet="ChatHistory", data=pd.DataFrame(st.session_state.chat_history))
+    st.success("Worksheet Updated 🤓")
+
+if st.button("Clear Worksheet"):
+    conn.clear(worksheet="ChatHistory")
+    st.success("Worksheet Cleared 🧹")
