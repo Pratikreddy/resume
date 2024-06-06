@@ -103,25 +103,24 @@ if "run_count" not in st.session_state:
 st.title("PRATIK REDDY")
 st.write("Tech enthusiast blending innovation with automation.")
 
-# Profile picture
-st.image("https://raw.githubusercontent.com/Pratikreddy/resume/main/1715865738291.jpeg", width=150)
-
-# Social media links
-st.markdown("""
-<div style="background-color:black; padding: 10px; margin: 10px 0; text-align:center;">
-    <a href="https://github.com/Pratikreddy" target="_blank" style="margin-right: 15px;">
-        <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
-    </a>
-    <a href="https://x.com/pratikredy" target="_blank" style="margin-right: 15px;">
-        <img src="https://img.shields.io/badge/X-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
-    </a>
-    <a href="https://www.linkedin.com/in/pratik-reddy-447b531b1/" target="_blank">
-        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
-    </a>
-</div>
-""", unsafe_allow_html=True)
-
-st.write("**This app uses an LLM served by Groq and a RAG pipeline to retrieve data from a vector index like FAISS.**")
+# Profile picture and social media links side by side
+col1, col2 = st.columns([1, 3])
+with col1:
+    st.image("https://github.com/Pratikreddy/resume/blob/main/1715865738291.jpeg", width=150)
+with col2:
+    st.markdown("""
+    <div style="background-color:black; padding: 10px; text-align:center;">
+        <a href="https://github.com/Pratikreddy" target="_blank" style="margin-right: 15px;">
+            <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+        </a>
+        <a href="https://x.com/pratikredy" target="_blank" style="margin-right: 15px;">
+            <img src="https://img.shields.io/badge/X-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
+        </a>
+        <a href="https://www.linkedin.com/in/pratik-reddy-447b531b1/" target="_blank">
+            <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.write("**Talk to Whis, Pratik's AI Agent**")
 
@@ -180,15 +179,17 @@ project = {
     """
 }
 
-with st.expander(project["title"]):
-    st.write(project["description"])
-    st.markdown(project["details"])
-
-if st.button(f"Add {project['title']} to Chat"):
-    project_info = f"Project: {project['title']}\nDescription: {project['description']}\nDetails: {project['details']}"
-    st.session_state.chat_history.append({"role": "assistant", "content": project_info, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
-    data = pd.DataFrame(st.session_state.chat_history)
-    conn.update(worksheet=st.session_state.worksheet_name, data=data)
+col1, col2 = st.columns([3, 1])
+with col1:
+    with st.expander(project["title"]):
+        st.write(project["description"])
+        st.markdown(project["details"])
+with col2:
+    if st.button(f"Add {project['title']} to Chat"):
+        project_info = f"Project: {project['title']}\nDescription: {project['description']}\nDetails: {project['details']}"
+        st.session_state.chat_history.append({"role": "assistant", "content": project_info, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
+        data = pd.DataFrame(st.session_state.chat_history)
+        conn.update(worksheet=st.session_state.worksheet_name, data=data)
 
 # Updated resume details
 resume = """
