@@ -103,15 +103,23 @@ if "run_count" not in st.session_state:
 st.title("PRATIK REDDY")
 st.write("Tech enthusiast blending innovation with automation.")
 
-# Profile picture (update the URL with the raw URL of your image from GitHub)
-st.image("https://github.com/Pratikreddy/resume/blob/main/1715865738291.jpeg", width=150)
+# Profile picture
+st.image("https://raw.githubusercontent.com/Pratikreddy/resume/main/1715865738291.jpeg", width=150)
 
 # Social media links
 st.markdown("""
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Pratikreddy)
-[![X](https://img.shields.io/badge/X-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/pratikredy)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pratik-reddy-447b531b1/)
-""")
+<div style="background-color:black; padding: 10px; margin: 10px 0; text-align:center;">
+    <a href="https://github.com/Pratikreddy" target="_blank" style="margin-right: 15px;">
+        <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+    </a>
+    <a href="https://x.com/pratikredy" target="_blank" style="margin-right: 15px;">
+        <img src="https://img.shields.io/badge/X-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
+    </a>
+    <a href="https://www.linkedin.com/in/pratik-reddy-447b531b1/" target="_blank">
+        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
 st.write("**This app uses an LLM served by Groq and a RAG pipeline to retrieve data from a vector index like FAISS.**")
 
@@ -151,29 +159,36 @@ st.button("Send", on_click=send_message)
 # Dummy element to force rerun without showing error
 st.write(f"Run count: {st.session_state.run_count}")
 
-# Placeholder for profile picture, add your picture file
-st.image("https://raw.githubusercontent.com/yourusername/yourrepository/branch/path/to/profile_picture.jpg", caption="Pratik S Reddy", width=150)
+# Projects and Technologies section
+st.write("## Projects and Technologies")
 
-# Placeholder for project section, uncomment and add projects
-"""
-## Projects and Technologies
+project = {
+    "title": "Digital Resume",
+    "link": "https://github.com/Pratikreddy/resume",
+    "description": "A digital resume built using Streamlit, integrated with Groq API for LLM support and Google Sheets for data storage.",
+    "details": """
+    **Technologies Used:**
+    - Streamlit for building the web interface.
+    - Groq API for integrating LLM capabilities.
+    - Google Sheets for storing chat history and project data.
+    - Python for backend development and data processing.
 
-### Project 1: [Project Title](project_link)
-Description of the project, technologies used, and the role played by Pratik.
+    **Integration:**
+    - Streamlit handles the UI components and user interactions.
+    - Groq API processes user inputs and provides responses via LLM.
+    - Google Sheets stores and retrieves project data dynamically.
+    """
+}
 
-### Project 2: [Project Title](project_link)
-Description of the project, technologies used, and the role played by Pratik.
+with st.expander(project["title"]):
+    st.write(project["description"])
+    st.markdown(project["details"])
 
-### Project 3: [Project Title](project_link)
-Description of the project, technologies used, and the role played by Pratik.
-
-# Button to add project details to chat
-if st.button('Add Project to Chat'):
-    project_info = "Detailed project info to be added to chat."
+if st.button(f"Add {project['title']} to Chat"):
+    project_info = f"Project: {project['title']}\nDescription: {project['description']}\nDetails: {project['details']}"
     st.session_state.chat_history.append({"role": "assistant", "content": project_info, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
     data = pd.DataFrame(st.session_state.chat_history)
     conn.update(worksheet=st.session_state.worksheet_name, data=data)
-"""
 
 # Updated resume details
 resume = """
@@ -199,4 +214,3 @@ Accomplishments:
 - All India Football Federation licensed coach.
 - 360 and immersive VR video.
 """
-
