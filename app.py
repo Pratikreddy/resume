@@ -141,6 +141,14 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# Download resume button
+st.markdown("""
+<a href="https://raw.githubusercontent.com/Pratikreddy/resume/main/pratik%20resume%202024.pdf" download="Pratik_Reddy_Resume.pdf">
+    <button style="margin-top: 10px;">Download My Resume</button>
+</a>
+""", unsafe_allow_html=True)
+
+st.markdown("---")
 st.write("**Talk to Whis, Pratik's AI Agent**")
 
 # Sidebar details
@@ -237,4 +245,3 @@ Accomplishments:
 - All India Football Federation licensed coach.
 - 360 and immersive VR video.
 """
-
