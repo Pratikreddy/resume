@@ -101,26 +101,45 @@ if "run_count" not in st.session_state:
 
 # Streamlit app UI
 st.title("PRATIK REDDY")
-st.write("Tech enthusiast blending innovation with automation.")
+st.markdown("""
+<style>
+.circular-img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.socials-section {
+    display: flex;
+    gap: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
 
-# Profile picture and social media links side by side
-col1, col2 = st.columns([1, 3])
-with col1:
-    st.image("https://raw.githubusercontent.com/Pratikreddy/resume/main/1715865738291.jpeg", width=150)
-with col2:
-    st.markdown("""
-    <div style="background-color:black; padding: 10px; text-align:center;">
-        <a href="https://github.com/Pratikreddy" target="_blank" style="margin-right: 15px;">
-            <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
-        </a>
-        <a href="https://x.com/pratikredy" target="_blank" style="margin-right: 15px;">
-            <img src="https://img.shields.io/badge/X-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
-        </a>
-        <a href="https://www.linkedin.com/in/pratik-reddy-447b531b1/" target="_blank">
-            <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
-        </a>
+st.markdown("""
+<div class="profile-section">
+    <img src="https://raw.githubusercontent.com/Pratikreddy/resume/main/1715865738291.jpeg" class="circular-img">
+    <div>
+        <h2>Tech enthusiast blending innovation with automation.</h2>
+        <div class="socials-section">
+            <a href="https://github.com/Pratikreddy" target="_blank">
+                <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
+            </a>
+            <a href="https://x.com/pratikredy" target="_blank">
+                <img src="https://img.shields.io/badge/X-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
+            </a>
+            <a href="https://www.linkedin.com/in/pratik-reddy-447b531b1/" target="_blank">
+                <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white">
+            </a>
+        </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
 st.write("**Talk to Whis, Pratik's AI Agent**")
 
@@ -140,6 +159,7 @@ Aiming to innovate and implement new ideas for growth.
 """)
 
 # Chat history with custom borders
+st.markdown("### Chat")
 for message in st.session_state.chat_history:
     if message["role"] == "user":
         st.markdown(
@@ -159,7 +179,8 @@ st.button("Send", on_click=send_message)
 st.write(f"Run count: {st.session_state.run_count}")
 
 # Projects and Technologies section
-st.write("## Projects and Technologies")
+st.markdown("---")
+st.markdown("## Projects and Technologies")
 
 project = {
     "title": "Digital Resume",
@@ -179,6 +200,7 @@ project = {
     """
 }
 
+st.markdown("### Projects")
 col1, col2 = st.columns([3, 1])
 with col1:
     with st.expander(project["title"]):
@@ -215,3 +237,4 @@ Accomplishments:
 - All India Football Federation licensed coach.
 - 360 and immersive VR video.
 """
+
