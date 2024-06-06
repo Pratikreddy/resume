@@ -106,7 +106,7 @@ st.write("Tech enthusiast blending innovation with automation.")
 # Profile picture and social media links side by side
 col1, col2 = st.columns([1, 3])
 with col1:
-    st.image("https://github.com/Pratikreddy/resume/blob/main/1715865738291.jpeg", width=150)
+    st.image("https://raw.githubusercontent.com/Pratikreddy/resume/main/1715865738291.jpeg", width=150)
 with col2:
     st.markdown("""
     <div style="background-color:black; padding: 10px; text-align:center;">
