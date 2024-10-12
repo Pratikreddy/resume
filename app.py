@@ -53,7 +53,9 @@ Accomplishments:
 spreadsheet_url = st.secrets["connections"]["gsheets"]["spreadsheet"]
 
 # Set up connection to Google Sheets
-conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+#conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+#old line was not working with the newer version of streamlit.
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Initialize chat history and worksheet name as a session state
 if "chat_history" not in st.session_state:
