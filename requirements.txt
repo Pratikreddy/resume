@@ -1,5 +1,5 @@
 streamlit==1.35.0
-st-gsheets-connection
+st-gsheets-connection>=0.0.4
 requests
 groq
 datetime
